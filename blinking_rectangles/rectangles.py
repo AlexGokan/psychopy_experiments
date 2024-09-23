@@ -52,23 +52,42 @@ def get_color_s(t):
 bg1 = gamma_corr(get_color_s(np.pi/2))
 bg2 = gamma_corr(get_color_s(3*np.pi/2))
 
+window = visual.Window((1920,1080),allowGUI=False,monitor='testMonitor',units='deg')
+
 #<--get participant info-->
-participant_info = {'name':'test','exp_num':0}
+participant_info = {'id_num':'test','exp_num':0}
 participant_info['datestr'] = data.getDateStr()
 
 dlg = gui.DlgFromDict(participant_info,title='fill out your info',fixed=['datestr'])
 
 #<--generate csv file-->
-base_path = 'C:/src/psychopy_experiments/rect_demo/data/'
+base_path = 'C:/src/psychopy_experiments/blinking_rectangles/data/'
 
-filename = base_path + participant_info['name'] + participant_info['datestr']
+filename = base_path + participant_info['id_num'] + participant_info['datestr']
 Fout = open(filename+'.csv','w')
 Fout.write('plus_minus_s,gap,height,in_out\n')
 
 
+#<--show instructions-->
+txt_size = 0.5
+msg1 = visual.TextStim(window,pos=[0,2],height=txt_size,text="You will see a set of blinking rectangles, one on each side of the screen")
+msg2 = visual.TextStim(window,pos=[0,0],height=txt_size,text="Press Y if they are blinking in phase (at the same time)")
+msg3 = visual.TextStim(window,pos=[0,-1],height=txt_size,text="Press N if they are blinking out of phase (at different times)")
+msg4 = visual.TextStim(window,pos=[0,-2],height=txt_size,text="Press Q or esc at any time to quit")
+msg5 = visual.TextStim(window,pos=[0,-4],height=txt_size,text="Press any key to continue")
+
+msg1.draw()
+msg2.draw()
+msg3.draw()
+msg4.draw()
+msg5.draw()
+window.flip()
+event.waitKeys()
+
 #<--construct all possible pairs of the other variable parameters-->
-possible_spacing = [0,0.1,0.3,2.5]
-possible_heights = [2,5,6,8]
+possible_spacing = [0,1/60,2/60,4/60,8/60,32/60]#1/60 deg = 1 arcmin
+possible_heights = 5+np.array([0,1/60,2/60,4/60,8/60,16/60,64/60])
+
 param_combinations = list(iter_product(possible_spacing,possible_heights))
 np.random.shuffle(param_combinations)
 print(param_combinations)
@@ -76,7 +95,7 @@ print('==========================')
 
 #-------------------------
 
-window = visual.Window((1200,800),allowGUI=False,monitor='testMonitor',units='deg')
+
 
 
 left_blinker = visual.Rect(window,size=[1,5],ori=0,pos=[-4,0],fillColor=[.5,.5,0])
