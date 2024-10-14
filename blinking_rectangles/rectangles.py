@@ -4,6 +4,12 @@ from psychopy import core,visual,event,data,gui
 import numpy as np
 from itertools import product as iter_product
 
+from psychopy import monitors
+laptop_monitor = monitors.Monitor('laptop')
+laptop_monitor.setSizePix((1920,1080))
+laptop_monitor.setWidth(13.5*2.54)
+laptop_monitor.setDistance(20)
+
 #<--base parameters-->
 
 minus_plus = +1
@@ -52,7 +58,7 @@ def get_color_s(t):
 bg1 = gamma_corr(get_color_s(np.pi/2))
 bg2 = gamma_corr(get_color_s(3*np.pi/2))
 
-window = visual.Window((1920,1080),allowGUI=False,monitor='testMonitor',units='deg')
+window = visual.Window((1920,1080),allowGUI=False,monitor=laptop_monitor,units='deg')
 
 #<--get participant info-->
 participant_info = {'id_num':'test','exp_num':0}
